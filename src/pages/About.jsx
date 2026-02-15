@@ -52,28 +52,28 @@ export const About = () => {
 
   const team = [
     {
-      name: 'Sarah Chen',
-      role: 'CEO & Co-Founder',
-      bio: 'Blockchain expert with 10+ years in fintech and academic technology.',
-      image: 'SC',
+      name: 'Darshan A B',
+      role: 'Backend Developer',
+      bio: 'Backend developer specializing in scalable APIs, database design, and server-side architecture.',
+      image: 'D AB',
     },
     {
-      name: 'Michael Rodriguez',
-      role: 'CTO & Co-Founder',
-      bio: 'Full-stack developer specializing in distributed systems and cryptography.',
-      image: 'MR',
+      name: 'Harsha Patil',
+      role: 'Frontend Developer',
+      bio: 'Frontend developer specializing in responsive interfaces, performance optimization, and modern UI frameworks.',
+      image: 'HP',
     },
     {
-      name: 'Emily Johnson',
-      role: 'Head of Product',
-      bio: 'Product visionary focused on user experience and educational technology.',
-      image: 'EJ',
+      name: 'Gaurav Nayak',
+      role: ' Blockchain Developer',
+      bio: 'Blockchain developer specializing in smart contracts, decentralized applications, and cryptographic protocols.',
+      image: 'GN',
     },
     {
-      name: 'David Kim',
-      role: 'Lead Engineer',
-      bio: 'Blockchain developer with expertise in smart contracts and DeFi.',
-      image: 'DK',
+      name: 'Bharat',
+      role: 'Documantaion',
+      bio: 'Technical writer specializing in clear documentation, developer guides, and system architecture explanations.',
+      image: 'BH',
     },
   ]
 
@@ -233,17 +233,17 @@ export const About = () => {
               <div className="text-center">
                 <Mail className="w-8 h-8 text-cyber-blue mx-auto mb-4" />
                 <h3 className="font-semibold text-white mb-2">Email</h3>
-                <p className="text-gray-400">support@certchain.io</p>
+                <p className="text-gray-400">harshapatilhp1@gmail.com</p>
               </div>
               <div className="text-center">
                 <Phone className="w-8 h-8 text-cyber-blue mx-auto mb-4" />
                 <h3 className="font-semibold text-white mb-2">Phone</h3>
-                <p className="text-gray-400">+1 (555) 123-4567</p>
+                <p className="text-gray-400">+91 81474 89287</p>
               </div>
               <div className="text-center">
                 <MapPin className="w-8 h-8 text-cyber-blue mx-auto mb-4" />
                 <h3 className="font-semibold text-white mb-2">Office</h3>
-                <p className="text-gray-400">San Francisco, CA</p>
+                <p className="text-gray-400">BMSIT College</p>
               </div>
             </div>
 
