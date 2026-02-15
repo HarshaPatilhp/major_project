@@ -1,12 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Shield, User, LogOut, Menu, X, ChevronDown, GraduationCap, Building, Settings, BookOpen, Home, Info } from 'lucide-react'
+import {
+  Shield,
+  User,
+  LogOut,
+  Menu,
+  X,
+  ChevronDown,
+  GraduationCap,
+  Building,
+  Settings
+} from 'lucide-react'
 
 export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const handleLogout = () => {
     setUser(null)
@@ -15,7 +33,6 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
   }
 
   const getNavItems = () => {
-    // Always show these main navigation items as shown in the reference image
     const mainNavItems = [
       { name: 'Home', path: '/' },
       { name: 'Features', path: '/features' },
@@ -23,7 +40,6 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
       { name: 'About', path: '/about' },
     ]
 
-    // If user is logged in, add role-specific items
     if (user) {
       if (userRole === 'student') {
         return [
@@ -63,9 +79,13 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
   }
 
   return (
-    <nav className="glass sticky top-0 z-50">
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300
+      ${scrolled ? 'bg-black/80 backdrop-blur-md' : 'bg-transparent'}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+          
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-cyber-blue to-cyber-purple rounded-lg flex items-center justify-center">
@@ -74,17 +94,17 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
             <span className="text-xl font-bold text-white">EduBlockchain</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
-            {getNavItems().map((item) => (
+            {getNavItems().map(item => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  location.pathname === item.path
+                className={`text-sm font-medium transition-colors
+                  ${location.pathname === item.path
                     ? 'text-cyber-blue'
                     : 'text-gray-300 hover:text-cyber-blue'
-                }`}
+                  }`}
               >
                 {item.name}
               </Link>
@@ -97,31 +117,28 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
               <div className="relative">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-cyber-blue/30 hover:border-cyber-blue/50 transition-all duration-300"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-cyber-blue/30 hover:border-cyber-blue/50"
                 >
                   {getRoleIcon()}
-                  <span className="text-sm font-medium text-white">{user.name || user.email}</span>
+                  <span className="text-sm text-white">{user.name || user.email}</span>
                   <ChevronDown className="w-4 h-4 text-gray-400" />
                 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 glass-dark border border-cyber-blue/30 rounded-lg shadow-lg">
-                    <div className="py-1">
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-cyber-blue hover:bg-white/5"
-                        onClick={() => setIsProfileOpen(false)}
-                      >
-                        Profile
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Logout</span>
-                      </button>
-                    </div>
+                  <div className="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-md border border-cyber-blue/30 rounded-lg">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:text-cyber-blue"
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300"
+                    >
+                      Logout
+                    </button>
                   </div>
                 )}
               </div>
@@ -132,68 +149,27 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-300 hover:text-cyber-blue"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {getNavItems().map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                    location.pathname === item.path
-                      ? 'text-cyber-blue bg-white/5'
-                      : 'text-gray-300 hover:text-cyber-blue hover:bg-white/5'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-              
-              {user && (
-                <>
-                  <Link
-                    to="/profile"
-                    className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-cyber-blue hover:bg-white/5"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <User className="w-4 h-4" />
-                    <span>Profile</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-red-400 hover:text-red-300 hover:bg-white/5"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span>Logout</span>
-                  </button>
-                </>
-              )}
-              
-              {!user && (
-                <Link
-                  to="/login"
-                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-cyber-blue bg-white/5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <User className="w-4 h-4" />
-                  <span>Login</span>
-                </Link>
-              )}
-            </div>
+          <div className="md:hidden bg-black/90 backdrop-blur-md">
+            {getNavItems().map(item => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMenuOpen(false)}
+                className="block px-4 py-2 text-gray-300 hover:text-cyber-blue"
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
         )}
       </div>
