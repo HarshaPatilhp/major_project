@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* =========================
+   Base styles
+   ========================= */
+@layer base {
+  body {
+    color: #ffffff;
+    font-family: Inter, system-ui, sans-serif;
+    min-height: 100vh;
+    background-color: #050508; /* cyber-darker */
+    background: linear-gradient(
+      135deg,
+      #0a0a0f 0%,
+      #1a1a2e 50%,
+      #0a0a0f 100%
+    );
+    background-attachment: fixed;
+  }
+}
+
+/* =========================
+   Component styles
+   ========================= */
+@layer components {
+  .glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-dark {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .cyber-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(to right, #00d4ff, #8b5cf6);
+    transition: transform 300ms, box-shadow 300ms, filter 300ms;
+    z-index: 0;
+  }
+
+  .cyber-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #8b5cf6, #00d4ff);
+    opacity: 0;
+    transition: opacity 300ms;
+    z-index: -1;
+  }
+
+  .cyber-button:hover::before {
+    opacity: 1;
+  }
+
+  .cyber-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 212, 255, 0.25);
+  }
+
+  .cyber-card {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    transition: border-color 300ms, transform 300ms, box-shadow 300ms;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .cyber-card:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+  }
+
+  .cyber-input {
+    width: 100%;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 300ms, box-shadow 300ms;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .cyber-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .cyber-input:focus {
+    border-color: rgba(0, 212, 255, 1);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+  }
+
+  .cyber-gradient-text {
+    background-image: linear-gradient(to right, #00d4ff, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
