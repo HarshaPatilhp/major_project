@@ -14,6 +14,10 @@ import { AdminDashboard } from './pages/AdminDashboard'
 import { PublicVerification } from './pages/PublicVerification'
 import { Profile } from './pages/Profile'
 import { About } from './pages/About'
+import { ManageInstitutions } from './pages/ManageInstitutions'
+import { SystemSettings } from './pages/SystemSettings'
+import { SecurityCenter } from './pages/SecurityCenter'
+import { Analytics } from './pages/Analytics'
 import { Navbar } from './components/Navbar'
 import './index.css'
 
@@ -37,8 +41,12 @@ function App() {
           <Route path="/institution-dashboard" element={userRole === 'institution' ? <InstitutionDashboard /> : <Navigate to="/login" />} />
           <Route path="/upload-record" element={userRole === 'institution' ? <UploadRecord /> : <Navigate to="/login" />} />
           <Route path="/admin-dashboard" element={userRole === 'admin' ? <AdminDashboard /> : <Navigate to="/login" />} />
+          <Route path="/manage-institutions" element={userRole === 'admin' ? <ManageInstitutions /> : <Navigate to="/login" />} />
+          <Route path="/system-settings" element={userRole === 'admin' ? <SystemSettings /> : <Navigate to="/login" />} />
+          <Route path="/security-center" element={userRole === 'admin' ? <SecurityCenter /> : <Navigate to="/login" />} />
+          <Route path="/analytics" element={userRole === 'admin' ? <Analytics /> : <Navigate to="/login" />} />
           <Route path="/public-verification" element={<PublicVerification />} />
-          <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={user ? <Profile userRole={userRole} /> : <Navigate to="/login" />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>

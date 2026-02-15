@@ -138,12 +138,16 @@ export const StudentDashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold cyber-gradient-text mb-2">
           Welcome back, John!
         </h1>
+        <div className="flex items-center space-x-4 mb-2">
+          <span className="text-gray-400">Student ID:</span>
+          <span className="text-cyber-blue font-semibold">STU2024001</span>
+        </div>
         <p className="text-gray-400">
           Manage your academic certificates and track their verification status
         </p>
