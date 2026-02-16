@@ -33,36 +33,39 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
   }
 
   const getNavItems = () => {
-    const mainNavItems = [
-      { name: 'Home', path: '/' },
-      { name: 'Features', path: '/features' },
-      { name: 'How it Works', path: '/how-it-works' },
-      { name: 'About', path: '/about' },
-    ]
-
     if (user) {
       if (userRole === 'student') {
         return [
-          ...mainNavItems,
           { name: 'Dashboard', path: '/student-dashboard' },
           { name: 'My Records', path: '/my-records' },
           { name: 'Share & Verify', path: '/share-verify' },
         ]
       } else if (userRole === 'institution') {
         return [
-          ...mainNavItems,
           { name: 'Dashboard', path: '/institution-dashboard' },
           { name: 'Upload Record', path: '/upload-record' },
+          { name: 'Manage Records', path: '/manage-records' },
+          { name: 'Analytics', path: '/institution-analytics' },
+          { name: 'Profile', path: '/profile' },
         ]
       } else if (userRole === 'admin') {
         return [
-          ...mainNavItems,
           { name: 'Dashboard', path: '/admin-dashboard' },
+          { name: 'Manage Institutions', path: '/manage-institutions' },
+          { name: 'System Settings', path: '/system-settings' },
+          { name: 'Security Center', path: '/security-center' },
+          { name: 'Analytics', path: '/analytics' },
+          { name: 'Profile', path: '/profile' },
         ]
       }
     }
 
-    return mainNavItems
+    return [
+      { name: 'Home', path: '/' },
+      { name: 'Features', path: '/features' },
+      { name: 'How it Works', path: '/how-it-works' },
+      { name: 'About', path: '/about' },
+    ]
   }
 
   const getRoleIcon = () => {

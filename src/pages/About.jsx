@@ -104,7 +104,7 @@ export const About = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="cyber-gradient-text">About CertChain</span>
+              <span className="cyber-gradient-text">About EduBlockchain</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
               Revolutionizing academic credential verification with blockchain technology. 
@@ -157,7 +157,7 @@ export const About = () => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold cyber-gradient-text mb-4">Why Choose CertChain?</h2>
+            <h2 className="text-4xl font-bold cyber-gradient-text mb-4">Why Choose EduBlockchain?</h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Experience the next generation of certificate management with cutting-edge blockchain technology.
             </p>
@@ -204,7 +204,7 @@ export const About = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold cyber-gradient-text mb-4">Frequently Asked Questions</h2>
             <p className="text-xl text-gray-300">
-              Common questions about CertChain and blockchain verification
+              Common questions about EduBlockchain and blockchain verification
             </p>
           </div>
           <div className="space-y-6">

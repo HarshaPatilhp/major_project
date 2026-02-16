@@ -76,10 +76,15 @@ export const UploadRecord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      return
+    }
+    
     setIsSubmitting(true)
     setSubmitStatus('')
 
-    // Simulate API call
+    // Simulate blockchain transaction
     setTimeout(() => {
       setIsSubmitting(false)
       setSubmitStatus('success')
@@ -102,18 +107,97 @@ export const UploadRecord = () => {
         })
         setSkills([])
         setUploadedFiles([])
+        setErrors({})
         setSubmitStatus('')
       }, 3000)
     }, 2000)
   }
 
+  const [showPreview, setShowPreview] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  const validateForm = () => {
+    const newErrors = {}
+    
+    if (!formData.studentName.trim()) {
+      newErrors.studentName = 'Student name is required'
+    }
+    
+    if (!formData.studentEmail.trim()) {
+      newErrors.studentEmail = 'Student email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.studentEmail)) {
+      newErrors.studentEmail = 'Please enter a valid email address'
+    }
+    
+    if (!formData.studentId.trim()) {
+      newErrors.studentId = 'Student ID is required'
+    }
+    
+    if (!formData.certificateTitle.trim()) {
+      newErrors.certificateTitle = 'Certificate title is required'
+    }
+    
+    if (!formData.issuer.trim()) {
+      newErrors.issuer = 'Issuing institution is required'
+    }
+    
+    if (!formData.issueDate) {
+      newErrors.issueDate = 'Issue date is required'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
   const previewCertificate = () => {
-    // This would open a preview modal
-    alert('Preview functionality would be implemented here')
+    if (!validateForm()) {
+      return
+    }
+    setShowPreview(true)
+  }
+
+  const closePreview = () => {
+    setShowPreview(false)
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyber-darker via-gray-900 to-cyber-darker">
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230099ff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+        
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-cyber-blue/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyber-purple/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-pink/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+        
+        {/* Grid lines */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `linear-gradient(rgba(0,153,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,153,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}></div>
+        
+        {/* Floating particles */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-cyber-blue/30 rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 4}s`
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold cyber-gradient-text mb-2">Upload Certificate</h1>
@@ -149,9 +233,12 @@ export const UploadRecord = () => {
                 value={formData.studentName}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.studentName ? 'border-red-400' : ''}`}
                 placeholder="Enter student's full name"
               />
+              {errors.studentName && (
+                <p className="text-red-400 text-sm mt-1">{errors.studentName}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -163,9 +250,12 @@ export const UploadRecord = () => {
                 value={formData.studentEmail}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.studentEmail ? 'border-red-400' : ''}`}
                 placeholder="student@example.com"
               />
+              {errors.studentEmail && (
+                <p className="text-red-400 text-sm mt-1">{errors.studentEmail}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -177,9 +267,12 @@ export const UploadRecord = () => {
                 value={formData.studentId}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.studentId ? 'border-red-400' : ''}`}
                 placeholder="STU2024CS001"
               />
+              {errors.studentId && (
+                <p className="text-red-400 text-sm mt-1">{errors.studentId}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -219,9 +312,12 @@ export const UploadRecord = () => {
                 value={formData.certificateTitle}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.certificateTitle ? 'border-red-400' : ''}`}
                 placeholder="Bachelor of Computer Science"
               />
+              {errors.certificateTitle && (
+                <p className="text-red-400 text-sm mt-1">{errors.certificateTitle}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -233,9 +329,12 @@ export const UploadRecord = () => {
                 value={formData.issuer}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.issuer ? 'border-red-400' : ''}`}
                 placeholder="Tech University"
               />
+              {errors.issuer && (
+                <p className="text-red-400 text-sm mt-1">{errors.issuer}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -247,8 +346,11 @@ export const UploadRecord = () => {
                 value={formData.issueDate}
                 onChange={handleInputChange}
                 required
-                className="cyber-input w-full"
+                className={`cyber-input w-full ${errors.issueDate ? 'border-red-400' : ''}`}
               />
+              {errors.issueDate && (
+                <p className="text-red-400 text-sm mt-1">{errors.issueDate}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -445,6 +547,128 @@ export const UploadRecord = () => {
           </button>
         </div>
       </form>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-900 border border-cyber-blue/30 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-semibold text-white">Certificate Preview</h3>
+                <button
+                  onClick={closePreview}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="cyber-card p-8">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-cyber-blue to-cyber-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-white">TC</span>
+                  </div>
+                  <h4 className="text-2xl font-bold text-white mb-2">{formData.issuer || 'Tech University'}</h4>
+                  <p className="text-cyber-blue">Verified Institution</p>
+                </div>
+                
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-bold cyber-gradient-text mb-2">{formData.certificateTitle || 'Certificate of Achievement'}</h2>
+                  <p className="text-gray-400 mb-4">This is to certify that</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Student Name</p>
+                    <p className="text-lg font-semibold text-white">{formData.studentName || 'Student Name'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Student ID</p>
+                    <p className="text-lg font-semibold text-white">{formData.studentId || 'STU2024XXXX'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Email</p>
+                    <p className="text-lg font-semibold text-white">{formData.studentEmail || 'student@example.com'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Issue Date</p>
+                    <p className="text-lg font-semibold text-white">{formData.issueDate || '2024-01-15'}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Certificate Type</p>
+                    <p className="text-lg font-semibold text-white capitalize">
+                      {certificateTypes.find(type => type.value === formData.certificateType)?.label || 'Degree'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Grade</p>
+                    <p className="text-lg font-semibold text-white">{formData.grade || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Credits</p>
+                    <p className="text-lg font-semibold text-white">{formData.credits || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Duration</p>
+                    <p className="text-lg font-semibold text-white">{formData.duration || 'N/A'}</p>
+                  </div>
+                </div>
+                
+                {formData.description && (
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-400 mb-2">Description</p>
+                    <p className="text-white">{formData.description}</p>
+                  </div>
+                )}
+                
+                {skills.length > 0 && (
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-400 mb-2">Skills & Competencies</p>
+                    <div className="flex flex-wrap gap-2">
+                      {skills.map((skill, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center space-x-1 px-3 py-1 rounded-full bg-cyber-blue/10 text-cyber-blue border border-cyber-blue/30"
+                        >
+                          <span>{skill}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="border-t border-gray-700 pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-500">Certificate Hash</p>
+                      <p className="text-xs font-mono text-cyber-blue">
+                        0x7f9a8b3c4d5e6f1a2b3c4d5e6f7a8b9c
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">Transaction ID</p>
+                      <p className="text-xs font-mono text-cyber-blue">
+                        tx_123456789
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center mt-6">
+                  <div className="inline-flex items-center space-x-2 px-4 py-2 bg-cyber-blue/10 border border-cyber-blue/30 rounded-lg">
+                    <CheckCircle className="w-4 h-4 text-cyber-blue" />
+                    <span className="text-cyber-blue text-sm">Blockchain Verified</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   )
 }

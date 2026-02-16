@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Share2, 
-  Eye, 
+import {
+  Search,
+  Filter,
+  Download,
+  Share2,
+  Eye,
   Calendar,
   Award,
   FileText,
@@ -14,7 +14,7 @@ import {
   CheckCircle,
   Clock,
   AlertCircle,
-  MoreVertical
+  MoreVertical,
 } from 'lucide-react'
 
 export const MyRecords = () => {
@@ -86,14 +86,15 @@ export const MyRecords = () => {
   ]
 
   const filteredCertificates = certificates.filter(cert => {
-    const matchesSearch = cert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cert.issuer.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch =
+      cert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cert.issuer.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === 'all' || cert.type === filterType
     const matchesStatus = filterStatus === 'all' || cert.status === filterStatus
     return matchesSearch && matchesType && matchesStatus
   })
 
-  const getStatusColor = (status) => {
+  const getStatusColor = status => {
     switch (status) {
       case 'verified':
         return 'text-green-400 bg-green-400/10'
@@ -106,7 +107,7 @@ export const MyRecords = () => {
     }
   }
 
-  const getTypeIcon = (type) => {
+  const getTypeIcon = type => {
     switch (type) {
       case 'degree':
         return <Award className="w-4 h-4" />
@@ -121,7 +122,7 @@ export const MyRecords = () => {
     }
   }
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = status => {
     switch (status) {
       case 'verified':
         return <CheckCircle className="w-4 h-4" />
@@ -135,135 +136,140 @@ export const MyRecords = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold cyber-gradient-text mb-2">My Records</h1>
-        <p className="text-gray-400">
-          Manage and track all your academic certificates and credentials
-        </p>
-      </div>
+    <div className="min-h-screen relative isolate">
+      {/* Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-cyber-darker via-gray-900 to-cyber-darker" />
 
-      {/* Filters */}
-      <div className="cyber-card mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search certificates..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="cyber-input pl-10 w-full"
-            />
-          </div>
-          
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="cyber-input"
-          >
-            <option value="all">All Types</option>
-            <option value="degree">Degrees</option>
-            <option value="certificate">Certificates</option>
-            <option value="specialization">Specializations</option>
-            <option value="course">Courses</option>
-          </select>
-
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="cyber-input"
-          >
-            <option value="all">All Status</option>
-            <option value="verified">Verified</option>
-            <option value="pending">Pending</option>
-            <option value="expired">Expired</option>
-          </select>
-
-          <button className="cyber-button flex items-center justify-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <span>Apply Filters</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Results Count */}
-      <div className="mb-4 text-gray-400">
-        Showing {filteredCertificates.length} of {certificates.length} certificates
-      </div>
-
-      {/* Certificates List */}
-      <div className="space-y-4">
-        {filteredCertificates.map((cert) => (
-          <div key={cert.id} className="cyber-card hover:border-cyber-blue/50 transition-all duration-300">
-            <div className="flex items-center justify-between">
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-lg bg-cyber-blue/10">
-                  {getTypeIcon(cert.type)}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-1">{cert.title}</h3>
-                  <p className="text-gray-400 mb-2">{cert.issuer}</p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>{cert.date}</span>
-                    </span>
-                    <span className={`flex items-center space-x-1 px-2 py-1 rounded-full ${getStatusColor(cert.status)}`}>
-                      {getStatusIcon(cert.status)}
-                      <span className="capitalize">{cert.status}</span>
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs text-gray-500">
-                    <div>Hash: {cert.hash.slice(0, 20)}...</div>
-                    <div>Transaction: {cert.transactionId}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Link
-                  to={`/record-details/${cert.id}`}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                  title="View Details"
-                >
-                  <Eye className="w-5 h-5 text-cyber-blue" />
-                </Link>
-                <button
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                  title="Download"
-                >
-                  <Download className="w-5 h-5 text-cyber-purple" />
-                </button>
-                <Link
-                  to="/share-verify"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                  title="Share"
-                >
-                  <Share2 className="w-5 h-5 text-cyber-pink" />
-                </Link>
-                <button
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                  title="More Options"
-                >
-                  <MoreVertical className="w-5 h-5 text-gray-400" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredCertificates.length === 0 && (
-        <div className="text-center py-12">
-          <FileText className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-white mb-2">No certificates found</h3>
+      {/* Content */}
+      <div className="relative z-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold cyber-gradient-text mb-2">
+            My Records
+          </h1>
           <p className="text-gray-400">
-            Try adjusting your search or filter criteria
+            Manage and track all your academic certificates and credentials
           </p>
         </div>
-      )}
+
+        {/* Filters */}
+        <div className="cyber-card mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search certificates..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="cyber-input pl-10 w-full"
+              />
+            </div>
+
+            <select
+              value={filterType}
+              onChange={e => setFilterType(e.target.value)}
+              className="cyber-input"
+            >
+              <option value="all">All Types</option>
+              <option value="degree">Degrees</option>
+              <option value="certificate">Certificates</option>
+              <option value="specialization">Specializations</option>
+              <option value="course">Courses</option>
+            </select>
+
+            <select
+              value={filterStatus}
+              onChange={e => setFilterStatus(e.target.value)}
+              className="cyber-input"
+            >
+              <option value="all">All Status</option>
+              <option value="verified">Verified</option>
+              <option value="pending">Pending</option>
+              <option value="expired">Expired</option>
+            </select>
+
+            <button className="cyber-button flex items-center justify-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <span>Apply Filters</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Results */}
+        <div className="space-y-4">
+          {filteredCertificates.map(cert => (
+            <div
+              key={cert.id}
+              className="cyber-card relative hover:border-cyber-blue/50 transition-all duration-300 p-3"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-start space-x-3">
+                  <div className="p-2 rounded-lg bg-cyber-blue/10">
+                    {getTypeIcon(cert.type)}
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-semibold text-white break-words">
+                      {cert.title}
+                    </h3>
+                    <p className="text-xs text-gray-400">{cert.issuer}</p>
+
+                    <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                      <Calendar className="w-3 h-3" />
+                      <span>{cert.date}</span>
+                      <span
+                        className={`flex items-center space-x-1 px-2 py-0.5 rounded-full ${getStatusColor(
+                          cert.status
+                        )}`}
+                      >
+                        {getStatusIcon(cert.status)}
+                        <span className="capitalize">{cert.status}</span>
+                      </span>
+                    </div>
+
+                    <div className="mt-3 text-xs text-gray-500 space-y-1">
+                      <div className="font-mono bg-gray-800/50 px-2 py-1 rounded">
+                        Hash: {cert.hash.slice(0, 25)}...
+                      </div>
+                      <div className="font-mono bg-gray-800/50 px-2 py-1 rounded">
+                        Transaction: {cert.transactionId}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-center space-x-2 pt-3 border-t border-gray-700/50">
+                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-blue/30 hover:border-cyber-blue">
+                    <Eye className="w-4 h-4 text-cyber-blue" />
+                    <span className="text-sm">View on Blockchain</span>
+                  </button>
+                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-purple/30 hover:border-cyber-purple">
+                    <Download className="w-4 h-4 text-cyber-purple" />
+                    <span className="text-sm">Download Certificate</span>
+                  </button>
+                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-pink/30 hover:border-cyber-pink">
+                    <Share2 className="w-4 h-4 text-cyber-pink" />
+                    <span className="text-sm">Share Certificate</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredCertificates.length === 0 && (
+          <div className="text-center py-12">
+            <FileText className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">
+              No certificates found
+            </h3>
+            <p className="text-gray-400">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
