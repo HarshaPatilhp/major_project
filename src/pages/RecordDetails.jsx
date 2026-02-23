@@ -109,7 +109,7 @@ export const RecordDetails = () => {
           className="inline-flex items-center space-x-2 text-cyber-blue hover:text-cyber-purple mb-4"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Records</span>
+          
         </Link>
         <h1 className="text-3xl font-bold cyber-gradient-text mb-2">Certificate Details</h1>
         <p className="text-gray-400">
