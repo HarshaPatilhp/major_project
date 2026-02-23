@@ -171,11 +171,11 @@ export const Login = ({ setUser, setUserRole }) => {
                     <div className="absolute inset-0 bg-gradient-to-r from-cyber-blue to-cyber-purple rounded-full blur-xl opacity-50 animate-pulse"></div>
                     <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl bg-black-800">
                       <img 
-                        src="/public/Profile.png"
+                        src="/Profile.png"
                         alt="Student Profile"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.target.src = "/public/Profile.png"
+                          e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1f7268daa48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&h=150&q=80"
                         }}
                       />
                     </div>
