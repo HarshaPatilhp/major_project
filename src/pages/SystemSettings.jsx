@@ -276,7 +276,7 @@ export const SystemSettings = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Max File Size</label>
+                <label className="block text-sm font-medium text-black-300 mb-2">Max File Size</label>
                 <select
                   value={generalSettings.maxFileSize}
                   onChange={(e) => setGeneralSettings({...generalSettings, maxFileSize: e.target.value})}
