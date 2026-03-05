@@ -15,7 +15,9 @@ import {
   Calendar,
   Settings,
   Smartphone,
-  Mail
+  Mail,
+  FileText,
+  Plus
 } from 'lucide-react'
 
 export const ShareVerify = () => {
@@ -45,7 +47,7 @@ export const ShareVerify = () => {
   const generateQRCode = async () => {
     if (!selectedCertificate) return
     
-    const verificationUrl = `https://EduBlockchain.io/verify/${selectedCertificate.hash}`
+    const verificationUrl = `https://EduBlockchain.io/verify/${selectedCertificate.hash || selectedCertificate.id}`
     try {
       const url = await QRCode.toDataURL(verificationUrl, {
         width: 300,
@@ -64,7 +66,7 @@ export const ShareVerify = () => {
   const generatePublicLink = () => {
     if (!selectedCertificate) return
     
-    const link = `https://EduBlockchain.io/public/${selectedCertificate.hash}`
+    const link = `https://EduBlockchain.io/public/${selectedCertificate.hash || selectedCertificate.id}`
     setPublicLink(link)
   }
 
@@ -146,27 +148,41 @@ export const ShareVerify = () => {
           <div className="cyber-card">
             <h3 className="text-lg font-semibold text-white mb-4">Select Certificate</h3>
             <div className="space-y-3">
-              {certificates.map((cert) => (
-                <button
-                  key={cert.id}
-                  onClick={() => setSelectedCertificate(cert)}
-                  className={`w-full p-4 rounded-lg border transition-all duration-300 text-left ${
-                    selectedCertificate?.id === cert.id
-                      ? 'border-cyber-blue bg-cyber-blue/10'
-                      : 'border-gray-600 hover:border-gray-500 glass-dark'
-                  }`}
-                >
-                  <h4 className="font-medium text-white mb-1">{cert.title}</h4>
-                  <p className="text-sm text-gray-400 mb-2">{cert.issuer}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">{cert.date}</span>
-                    <span className="flex items-center space-x-1 text-xs text-green-400">
-                      <CheckCircle className="w-3 h-3" />
-                      <span>Verified</span>
-                    </span>
-                  </div>
-                </button>
-              ))}
+              {certificates.length > 0 ? (
+                certificates.map((cert) => (
+                  <button
+                    key={cert.id}
+                    onClick={() => setSelectedCertificate(cert)}
+                    className={`w-full p-4 rounded-lg border transition-all duration-300 text-left ${
+                      selectedCertificate?.id === cert.id
+                        ? 'border-cyber-blue bg-cyber-blue/10'
+                        : 'border-gray-600 hover:border-gray-500 glass-dark'
+                    }`}
+                  >
+                    <h4 className="font-medium text-white mb-1">{cert.title}</h4>
+                    <p className="text-sm text-gray-400 mb-2">{cert.issuer}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">{cert.date}</span>
+                      <span className="flex items-center space-x-1 text-xs text-green-400">
+                        <CheckCircle className="w-3 h-3" />
+                        <span>Verified</span>
+                      </span>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <FileText className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                  <p className="text-gray-400 mb-4">No certificates uploaded yet</p>
+                  <Link
+                    to="/upload-record"
+                    className="cyber-button inline-flex items-center space-x-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Upload First Certificate</span>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
@@ -348,7 +364,7 @@ export const ShareVerify = () => {
                   <div className="flex items-center justify-between pt-3 border-t border-gray-700">
                     <span className="text-xs text-gray-500">Certificate Hash:</span>
                     <span className="text-xs font-mono text-cyber-blue">
-                      {selectedCertificate.hash.slice(0, 20)}...
+                      {(selectedCertificate.hash || selectedCertificate.id.toString()).slice(0, 20)}...
                     </span>
                   </div>
                 </div>
