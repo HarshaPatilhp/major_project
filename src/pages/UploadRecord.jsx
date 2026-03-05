@@ -68,15 +68,12 @@ export const UploadRecord = () => {
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files)
     const validFiles = files.filter(file => {
-      const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
-      const maxSize = 5 * 1024 * 1024 // 5MB
-      return validTypes.includes(file.type) && file.size <= maxSize
+      const isValidType = file.type === 'application/pdf' || 
+                          file.type === 'image/jpeg' || 
+                          file.type === 'image/png'
+      const isValidSize = file.size <= 5 * 1024 * 1024 // 5MB
+      return isValidType && isValidSize
     })
-
-    if (validFiles.length !== files.length) {
-      alert('Some files were rejected. Only PDF and image files (JPEG, PNG) up to 5MB are allowed.')
-    }
-
     setUploadedFiles(validFiles)
   }
 
@@ -508,20 +505,14 @@ export const UploadRecord = () => {
             <p className="text-gray-400 mb-4">
               Upload supporting documents (transcripts, ID proof, etc.)
             </p>
-            <input
-              type="file"
-              multiple
-              onChange={handleFileUpload}
-              className="hidden"
-              id="file-upload"
-            />
-            <label
-              htmlFor="file-upload"
-              className="cyber-button inline-flex items-center space-x-2 cursor-pointer"
+            <button
+              type="button"
+              onClick={openSystemFileDialog}
+              className="cyber-button inline-flex items-center space-x-2"
             >
               <Upload className="w-4 h-4" />
               <span>Choose Files</span>
-            </label>
+            </button>
           </div>
           {uploadedFiles.length > 0 && (
             <div className="mt-4 space-y-2">
