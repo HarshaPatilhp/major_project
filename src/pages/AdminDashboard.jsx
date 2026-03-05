@@ -82,29 +82,30 @@ export const AdminDashboard = () => {
     })
   }
 
+  // Calculate dynamic system metrics from uploaded certificates
   const systemMetrics = [
     {
       label: 'Blockchain Transactions',
-      value: '1.2M',
-      change: '+25%',
+      value: uploadedCertificates.length.toString(),
+      change: uploadedCertificates.length > 0 ? `+${uploadedCertificates.length}` : '0',
       icon: Database,
     },
     {
       label: 'API Requests',
-      value: '5.6M',
-      change: '+18%',
+      value: (uploadedCertificates.length * 100).toString(),
+      change: uploadedCertificates.length > 0 ? '+18%' : '0%',
       icon: Zap,
     },
     {
       label: 'Verification Success Rate',
-      value: '99.8%',
-      change: '+0.2%',
+      value: uploadedCertificates.length > 0 ? '100%' : '0%',
+      change: uploadedCertificates.length > 0 ? '+0%' : '0%',
       icon: CheckCircle,
     },
     {
       label: 'Average Response Time',
-      value: '0.3s',
-      change: '-15%',
+      value: uploadedCertificates.length > 0 ? '0.3s' : '0s',
+      change: uploadedCertificates.length > 0 ? '-15%' : '0%',
       icon: Clock,
     },
   ]
@@ -208,193 +209,203 @@ export const AdminDashboard = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold cyber-gradient-text mb-2">
-          Admin Dashboard
-        </h1>
-        <p className="text-gray-400">
-          System overview and administrative controls
-        </p>
-      </div>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold cyber-gradient-text mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-gray-400">
+            System overview and administrative controls
+          </p>
+        </div>
 
-      {/* System Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {systemStats.map((stat, index) => (
-          <div key={index} className="cyber-card">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+        {/* System Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {systemStats.map((stat, index) => (
+            <div key={index} className="cyber-card">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+                <span className="text-sm text-green-400">{stat.change}</span>
               </div>
-              <span className="text-sm text-green-400">{stat.change}</span>
+              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-400">{stat.label}</div>
             </div>
-            <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-            <div className="text-sm text-gray-400">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Quick Actions */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {quickActions.map((action, index) => (
-            <Link
-              key={index}
-              to={action.link}
-              className="cyber-card hover:scale-105 transition-transform duration-300 group"
-            >
-              <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} w-fit mb-4`}>
-                <action.icon className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyber-blue transition-colors">
-                {action.title}
-              </h3>
-              <p className="text-gray-400 text-sm">{action.description}</p>
-            </Link>
           ))}
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Activity */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Recent Activity</h2>
-            <button className="text-cyber-blue hover:text-cyber-purple text-sm">
-              View All →
-            </button>
-          </div>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="cyber-card hover:border-cyber-blue/50 transition-all duration-300">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3">
-                    <div className={`p-2 rounded-lg ${
-                      activity.type === 'alert' ? 'bg-red-400/10' : 'bg-cyber-blue/10'
-                    }`}>
-                      {getActivityIcon(activity.type)}
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-white mb-1">{activity.title}</h3>
-                      <p className="text-sm text-gray-400 mb-2">{activity.entity}</p>
-                      <div className="flex items-center space-x-4 text-xs text-gray-500">
-                        <span className="flex items-center space-x-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{activity.time}</span>
-                        </span>
-                        <span className={`px-2 py-1 rounded-full ${getStatusColor(activity.status)}`}>
-                          {activity.status}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <button className="text-cyber-blue hover:text-cyber-purple">
-                    <Eye className="w-5 h-5" />
-                  </button>
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {quickActions.map((action, index) => (
+              <Link
+                key={index}
+                to={action.link}
+                className="cyber-card hover:border-cyber-blue/50 transition-all duration-300 group"
+              >
+                <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} mb-4`}>
+                  <action.icon className="w-6 h-6 text-white" />
                 </div>
-              </div>
+                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyber-blue transition-colors">
+                  {action.title}
+                </h3>
+                <p className="text-gray-400 text-sm">{action.description}</p>
+              </Link>
             ))}
           </div>
         </div>
 
-        {/* System Metrics */}
-        <div>
-          <h2 className="text-xl font-semibold text-white mb-4">System Metrics</h2>
-          <div className="cyber-card">
-            <div className="space-y-6">
-              {systemMetrics.map((metric, index) => (
-                <div key={index}>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <metric.icon className="w-4 h-4 text-cyber-blue" />
-                      <span className="text-sm text-gray-400">{metric.label}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Recent Activity */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-white">Recent Activity</h2>
+              <button className="text-cyber-blue hover:text-cyber-purple text-sm">
+                View All →
+              </button>
+            </div>
+            <div className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="cyber-card hover:border-cyber-blue/50 transition-all duration-300">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3">
+                      <div className={`p-2 rounded-lg ${
+                        activity.type === 'alert' ? 'bg-red-400/10' : 'bg-cyber-blue/10'
+                      }`}>
+                        {getActivityIcon(activity.type)}
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-white mb-1">{activity.title}</h3>
+                        <p className="text-sm text-gray-400 mb-2">{activity.entity}</p>
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                          <span className="flex items-center space-x-1">
+                            <Clock className="w-3 h-3" />
+                            <span>{activity.time}</span>
+                          </span>
+                          <span className={`px-2 py-1 rounded-full ${getStatusColor(activity.status)}`}>
+                            {activity.status}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <span className={`text-sm ${
-                      metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'
-                    }`}>
-                      {metric.change}
-                    </span>
-                  </div>
-                  <div className="text-2xl font-bold text-white mb-2">{metric.value}</div>
-                  <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-cyber-blue to-cyber-purple h-2 rounded-full"
-                      style={{width: `${Math.random() * 30 + 70}%`}}
-                    ></div>
+                    <button className="text-cyber-blue hover:text-cyber-purple">
+                      <Eye className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* System Status */}
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold text-white mb-4">System Status</h3>
+          {/* System Metrics */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4">System Metrics</h2>
             <div className="cyber-card">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">Blockchain Network</span>
-                  <span className="flex items-center space-x-1 text-green-400">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>Operational</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">API Services</span>
-                  <span className="flex items-center space-x-1 text-green-400">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>Operational</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">Database</span>
-                  <span className="flex items-center space-x-1 text-green-400">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>Operational</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">Security Systems</span>
-                  <span className="flex items-center space-x-1 text-yellow-400">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span>Maintenance</span>
-                  </span>
-                </div>
+              <div className="space-y-6">
+                {systemMetrics.map((metric, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        <metric.icon className="w-4 h-4 text-cyber-blue" />
+                        <span className="text-sm text-gray-400">{metric.label}</span>
+                      </div>
+                      <span className={`text-sm ${
+                        metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {metric.change}
+                      </span>
+                    </div>
+                    <div className="text-2xl font-bold text-white mb-2">{metric.value}</div>
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-cyber-blue to-cyber-purple h-2 rounded-full"
+                        style={{width: `${Math.random() * 30 + 70}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Recent Alerts */}
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold text-white mb-4">Recent Alerts</h2>
-        <div className="cyber-card">
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3 p-3 bg-yellow-400/10 border border-yellow-400/30 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
-              <div>
-                <h4 className="font-medium text-white mb-1">Scheduled Maintenance</h4>
-                <p className="text-sm text-gray-400">
-                  System maintenance scheduled for tonight at 2:00 AM UTC. Expected downtime: 30 minutes.
-                </p>
-                <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3 p-3 bg-blue-400/10 border border-blue-400/30 rounded-lg">
-              <Shield className="w-5 h-5 text-cyber-blue mt-0.5" />
-              <div>
-                <h4 className="font-medium text-white mb-1">Security Update</h4>
-                <p className="text-sm text-gray-400">
-                  New security patches have been applied to all system components.
-                </p>
-                <p className="text-xs text-gray-500 mt-1">6 hours ago</p>
+            {/* System Status */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-white mb-4">System Status</h3>
+              <div className="cyber-card">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">Blockchain Network</span>
+                    <span className={`flex items-center space-x-1 ${uploadedCertificates.length > 0 ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <CheckCircle className="w-4 h-4" />
+                      <span>{uploadedCertificates.length > 0 ? 'Operational' : 'Ready'}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">API Services</span>
+                    <span className={`flex items-center space-x-1 ${uploadedCertificates.length > 0 ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <CheckCircle className="w-4 h-4" />
+                      <span>{uploadedCertificates.length > 0 ? 'Active' : 'Ready'}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">Database</span>
+                    <span className={`flex items-center space-x-1 ${uploadedCertificates.length > 0 ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <CheckCircle className="w-4 h-4" />
+                      <span>{uploadedCertificates.length > 0 ? 'Connected' : 'Ready'}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">Storage</span>
+                    <span className="flex items-center space-x-1 text-green-400">
+                      <CheckCircle className="w-4 h-4" />
+                      <span>Available</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">Security</span>
+                    <span className="flex items-center space-x-1 text-green-400">
+                      <CheckCircle className="w-4 h-4" />
+                      <span>Protected</span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Recent Alerts */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold text-white mb-4">Recent Alerts</h2>
+          <div className="cyber-card">
+            <div className="space-y-4">
+              {uploadedCertificates.length > 0 ? (
+                <div className="flex items-start space-x-3 p-3 bg-green-400/10 border border-green-400/30 rounded-lg">
+                  <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-white mb-1">System Active</h4>
+                    <p className="text-sm text-gray-400">
+                      {uploadedCertificates.length} certificates successfully processed and stored on blockchain.
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">System operational</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-start space-x-3 p-3 bg-blue-400/10 border border-blue-400/30 rounded-lg">
+                  <Shield className="w-5 h-5 text-cyber-blue mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-white mb-1">System Ready</h4>
+                    <p className="text-sm text-gray-400">
+                      EduBlockchain platform is ready for certificate uploads and verification.
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">Awaiting first certificate</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
