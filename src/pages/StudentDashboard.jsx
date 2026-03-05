@@ -15,75 +15,45 @@ import {
 } from 'lucide-react'
 
 export const StudentDashboard = () => {
+  // Calculate live statistics from stored certificates
+  const uploadedCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+  
   const stats = [
     {
       label: 'Total Certificates',
-      value: '12',
+      value: uploadedCertificates.length.toString(),
       icon: FileText,
       color: 'text-cyber-blue',
       bgColor: 'bg-cyber-blue/10',
-      change: '+2 this month',
+      change: `${uploadedCertificates.length} certificates`,
     },
     {
       label: 'Verified',
-      value: '8',
+      value: uploadedCertificates.filter(cert => cert.status === 'verified').length.toString(),
       icon: CheckCircle,
       color: 'text-green-400',
       bgColor: 'bg-green-400/10',
-      change: '+3 this week',
+      change: uploadedCertificates.length > 0 ? 'All verified' : 'No certificates',
     },
     {
       label: 'Shared',
-      value: '15',
+      value: '0', // Would come from sharing functionality
       icon: Share2,
       color: 'text-cyber-purple',
       bgColor: 'bg-cyber-purple/10',
-      change: '+5 this week',
+      change: 'No shares yet',
     },
     {
       label: 'Downloads',
-      value: '23',
+      value: '0', // Would come from download functionality
       icon: Download,
       color: 'text-cyber-pink',
       bgColor: 'bg-cyber-pink/10',
-      change: '+8 this month',
+      change: 'No downloads yet',
     },
   ]
 
-  const recentCertificates = [
-    {
-      id: 1,
-      title: 'Bachelor of Computer Science',
-      issuer: 'Tech University',
-      date: '2024-01-15',
-      status: 'verified',
-      type: 'degree',
-    },
-    {
-      id: 2,
-      title: 'Web Development Certification',
-      issuer: 'Code Academy',
-      date: '2024-01-10',
-      status: 'verified',
-      type: 'certificate',
-    },
-    {
-      id: 3,
-      title: 'Data Science Specialization',
-      issuer: 'Tech University',
-      date: '2024-01-05',
-      status: 'pending',
-      type: 'specialization',
-    },
-    {
-      id: 4,
-      title: 'Machine Learning Course',
-      issuer: 'AI Institute',
-      date: '2023-12-28',
-      status: 'verified',
-      type: 'course',
-    },
-  ]
+  const recentCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]').slice(0, 4)
 
   const quickActions = [
     {

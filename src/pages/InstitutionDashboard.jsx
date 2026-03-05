@@ -20,75 +20,45 @@ import {
 } from 'lucide-react'
 
 export const InstitutionDashboard = () => {
+  // Calculate live statistics from stored certificates
+  const uploadedCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+  
   const stats = [
     {
       label: 'Total Issued',
-      value: '1,247',
+      value: uploadedCertificates.length.toString(),
       icon: FileText,
       color: 'text-cyber-blue',
       bgColor: 'bg-cyber-blue/10',
-      change: '+12% this month',
+      change: `${uploadedCertificates.length} certificates issued`,
     },
     {
       label: 'Active Students',
-      value: '3,456',
+      value: '0', // Would come from student management system
       icon: Users,
       color: 'text-green-400',
       bgColor: 'bg-green-400/10',
-      change: '+8% this month',
+      change: 'No student data available',
     },
     {
       label: 'Verification Rate',
-      value: '98.5%',
+      value: uploadedCertificates.length > 0 ? '100%' : '0%',
       icon: CheckCircle,
       color: 'text-cyber-purple',
       bgColor: 'bg-cyber-purple/10',
-      change: '+2% this month',
+      change: uploadedCertificates.length > 0 ? 'All verified' : 'No certificates',
     },
     {
       label: 'Pending Requests',
-      value: '23',
+      value: '0', // Would come from request management system
       icon: Clock,
       color: 'text-yellow-400',
       bgColor: 'bg-yellow-400/10',
-      change: '-5% this month',
+      change: 'No pending requests',
     },
   ]
 
-  const recentCertificates = [
-    {
-      id: 1,
-      studentName: 'John Doe',
-      title: 'Bachelor of Computer Science',
-      date: '2024-01-15',
-      status: 'verified',
-      hash: '0x7f9a8b3c4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-    {
-      id: 2,
-      studentName: 'Jane Smith',
-      title: 'Web Development Certification',
-      date: '2024-01-14',
-      status: 'pending',
-      hash: '0x8b7f9a3c4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-    {
-      id: 3,
-      studentName: 'Mike Johnson',
-      title: 'Data Science Specialization',
-      date: '2024-01-13',
-      status: 'verified',
-      hash: '0x9c8b7f3a4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-    {
-      id: 4,
-      studentName: 'Sarah Williams',
-      title: 'Machine Learning Course',
-      date: '2024-01-12',
-      status: 'verified',
-      hash: '0xa9c8b7f4d5e6f1a2b3c4d5e6f7a8b9c3',
-    },
-  ]
+  const recentCertificates = []
 
   const quickActions = [
     {

@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom'
 import { Shield, Users, FileText, CheckCircle, Upload, ArrowRight, BookOpen, Building, Lock, Zap, Globe } from 'lucide-react'
 
 export const Home = () => {
+  // Calculate live statistics from stored certificates
+  const uploadedCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+  
   const stats = [
-    { label: 'Total Certificates', value: '1,247', icon: FileText },
-    { label: 'Verified Records', value: '1,156', icon: CheckCircle },
-    { label: 'Blockchain Status', value: 'Active', icon: Shield },
+    { label: 'Total Certificates', value: uploadedCertificates.length.toString(), icon: FileText },
+    { label: 'Verified Records', value: uploadedCertificates.filter(cert => cert.status === 'verified').length.toString(), icon: CheckCircle },
+    { label: 'Blockchain Status', value: uploadedCertificates.length > 0 ? 'Active' : 'Ready', icon: Shield },
   ]
 
   return (

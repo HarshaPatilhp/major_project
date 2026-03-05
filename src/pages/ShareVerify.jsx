@@ -33,32 +33,7 @@ export const ShareVerify = () => {
   const [copied, setCopied] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  const certificates = [
-    {
-      id: 1,
-      title: 'Bachelor of Computer Science',
-      issuer: 'Tech University',
-      date: '2024-01-15',
-      status: 'verified',
-      hash: '0x7f9a8b3c4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-    {
-      id: 2,
-      title: 'Web Development Certification',
-      issuer: 'Code Academy',
-      date: '2024-01-10',
-      status: 'verified',
-      hash: '0x8b7f9a3c4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-    {
-      id: 3,
-      title: 'Data Science Specialization',
-      issuer: 'Tech University',
-      date: '2024-01-05',
-      status: 'verified',
-      hash: '0x9c8b7f3a4d5e6f1a2b3c4d5e6f7a8b9c',
-    },
-  ]
+  const certificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
 
   useEffect(() => {
     if (selectedCertificate) {

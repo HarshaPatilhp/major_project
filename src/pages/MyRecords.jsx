@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Search,
@@ -15,75 +15,30 @@ import {
   Clock,
   AlertCircle,
   MoreVertical,
+  Upload,
 } from 'lucide-react'
 
 export const MyRecords = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
+  const [uploadedCertificates, setUploadedCertificates] = useState([])
 
-  const certificates = [
-    {
-      id: 1,
-      title: 'Bachelor of Computer Science',
-      issuer: 'Tech University',
-      date: '2024-01-15',
-      status: 'verified',
-      type: 'degree',
-      hash: '0x7f9a8b3c4d5e6f1a2b3c4d5e6f7a8b9c',
-      transactionId: 'tx_123456789',
-    },
-    {
-      id: 2,
-      title: 'Web Development Certification',
-      issuer: 'Code Academy',
-      date: '2024-01-10',
-      status: 'verified',
-      type: 'certificate',
-      hash: '0x8b7f9a3c4d5e6f1a2b3c4d5e6f7a8b9c',
-      transactionId: 'tx_234567890',
-    },
-    {
-      id: 3,
-      title: 'Data Science Specialization',
-      issuer: 'Tech University',
-      date: '2024-01-05',
-      status: 'pending',
-      type: 'specialization',
-      hash: '0x9c8b7f3a4d5e6f1a2b3c4d5e6f7a8b9c',
-      transactionId: 'tx_345678901',
-    },
-    {
-      id: 4,
-      title: 'Machine Learning Course',
-      issuer: 'AI Institute',
-      date: '2023-12-28',
-      status: 'verified',
-      type: 'course',
-      hash: '0xa9c8b7f4d5e6f1a2b3c4d5e6f7a8b9c3',
-      transactionId: 'tx_456789012',
-    },
-    {
-      id: 5,
-      title: 'Cloud Architecture Certificate',
-      issuer: 'Cloud Academy',
-      date: '2023-12-20',
-      status: 'expired',
-      type: 'certificate',
-      hash: '0xb9a8c7f5d6e7f1a2b3c4d5e6f7a8b9c4',
-      transactionId: 'tx_567890123',
-    },
-    {
-      id: 6,
-      title: 'Mobile App Development',
-      issuer: 'Dev Institute',
-      date: '2023-12-15',
-      status: 'verified',
-      type: 'course',
-      hash: '0xc9b8a7f6d7e8f1a2b3c4d5e6f7a8b9c5',
-      transactionId: 'tx_678901234',
-    },
-  ]
+  // Load certificates from localStorage on component mount
+  useEffect(() => {
+    const storedCertificates = localStorage.getItem('uploadedCertificates')
+    if (storedCertificates) {
+      setUploadedCertificates(JSON.parse(storedCertificates))
+    }
+  }, [])
+
+  // Save certificates to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('uploadedCertificates', JSON.stringify(uploadedCertificates))
+  }, [uploadedCertificates])
+
+  // Empty certificates array - only populated by uploads
+  const certificates = uploadedCertificates
 
   const filteredCertificates = certificates.filter(cert => {
     const matchesSearch =
@@ -238,27 +193,31 @@ export const MyRecords = () => {
                     </div>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-center space-x-2 pt-3 border-t border-gray-700/50">
-                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-blue/30 hover:border-cyber-blue">
-                    <Eye className="w-4 h-4 text-cyber-blue" />
-                    <span className="text-sm">View on Blockchain</span>
-                  </button>
-                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-purple/30 hover:border-cyber-purple">
-                    <Download className="w-4 h-4 text-cyber-purple" />
-                    <span className="text-sm">Download Certificate</span>
-                  </button>
-                  <button className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white/10 transition-colors border border-cyber-pink/30 hover:border-cyber-pink">
-                    <Share2 className="w-4 h-4 text-cyber-pink" />
-                    <span className="text-sm">Share Certificate</span>
-                  </button>
-                </div>
               </div>
             </div>
           ))}
         </div>
 
-        {filteredCertificates.length === 0 && (
+        {certificates.length === 0 && (
+          <div className="text-center py-16">
+            <Upload className="w-20 h-20 text-gray-500 mx-auto mb-6" />
+            <h3 className="text-2xl font-semibold text-white mb-4">
+              No certificates uploaded yet
+            </h3>
+            <p className="text-gray-400 mb-8 max-w-md mx-auto">
+              Start building your digital certificate collection by uploading your first certificate.
+            </p>
+            <Link
+              to="/upload-record"
+              className="cyber-button inline-flex items-center space-x-2 px-6 py-3"
+            >
+              <Upload className="w-5 h-5" />
+              <span>Upload Certificate</span>
+            </Link>
+          </div>
+        )}
+
+        {certificates.length > 0 && filteredCertificates.length === 0 && (
           <div className="text-center py-12">
             <FileText className="w-16 h-16 text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">

@@ -67,7 +67,17 @@ export const UploadRecord = () => {
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files)
-    setUploadedFiles(prev => [...prev, ...files])
+    const validFiles = files.filter(file => {
+      const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png']
+      const maxSize = 5 * 1024 * 1024 // 5MB
+      return validTypes.includes(file.type) && file.size <= maxSize
+    })
+
+    if (validFiles.length !== files.length) {
+      alert('Some files were rejected. Only PDF and image files (JPEG, PNG) up to 5MB are allowed.')
+    }
+
+    setUploadedFiles(validFiles)
   }
 
   const removeFile = (fileToRemove) => {
@@ -86,8 +96,37 @@ export const UploadRecord = () => {
 
     // Simulate blockchain transaction
     setTimeout(() => {
+      // Create certificate object
+      const newCertificate = {
+        id: Date.now(),
+        title: formData.certificateTitle,
+        issuer: formData.issuer,
+        date: formData.issueDate,
+        status: 'verified',
+        type: formData.certificateType,
+        hash: '0x' + Math.random().toString(16).substring(2, 66),
+        transactionId: 'tx_' + Math.random().toString(36).substring(2, 15),
+        studentName: formData.studentName,
+        studentEmail: formData.studentEmail,
+        studentId: formData.studentId,
+        grade: formData.grade,
+        credits: formData.credits,
+        duration: formData.duration,
+        description: formData.description,
+        skills: skills,
+        fileName: uploadedFiles[0]?.name || '',
+        fileSize: uploadedFiles[0]?.size || 0,
+        uploadDate: new Date().toISOString().split('T')[0]
+      }
+
+      // Save to localStorage
+      const existingCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+      const updatedCertificates = [...existingCertificates, newCertificate]
+      localStorage.setItem('uploadedCertificates', JSON.stringify(updatedCertificates))
+
       setIsSubmitting(false)
       setSubmitStatus('success')
+      
       // Reset form after successful submission
       setTimeout(() => {
         setFormData({

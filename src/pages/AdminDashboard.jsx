@@ -22,75 +22,65 @@ import {
 } from 'lucide-react'
 
 export const AdminDashboard = () => {
+  // Calculate live statistics from stored data
+  const uploadedCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+  
   const systemStats = [
     {
       label: 'Total Institutions',
-      value: '247',
+      value: '0', // Would come from institution management system
       icon: Building,
       color: 'text-cyber-blue',
       bgColor: 'bg-cyber-blue/10',
-      change: '+15% this month',
+      change: 'No data available',
     },
     {
       label: 'Total Students',
-      value: '45,678',
+      value: '0', // Would come from user management system
       icon: Users,
       color: 'text-green-400',
       bgColor: 'bg-green-400/10',
-      change: '+23% this month',
+      change: 'No data available',
     },
     {
       label: 'Certificates Issued',
-      value: '124,567',
+      value: uploadedCertificates.length.toString(),
       icon: FileText,
       color: 'text-cyber-purple',
       bgColor: 'bg-cyber-purple/10',
-      change: '+18% this month',
+      change: `${uploadedCertificates.length} total`,
     },
     {
       label: 'System Health',
-      value: '99.9%',
+      value: '100%',
       icon: Shield,
       color: 'text-cyber-pink',
       bgColor: 'bg-cyber-pink/10',
-      change: 'Optimal',
+      change: 'Operational',
     },
   ]
 
-  const recentActivity = [
-    {
+  // Live recent activity based on uploaded certificates
+  const recentActivity = uploadedCertificates.slice(0, 4).map((cert, index) => ({
+    id: cert.id,
+    type: 'certificate',
+    title: 'Certificate uploaded',
+    entity: `${cert.title} - ${cert.issuer}`,
+    time: 'Recently uploaded',
+    status: 'verified',
+  }))
+
+  // If no certificates, show default message
+  if (recentActivity.length === 0) {
+    recentActivity.push({
       id: 1,
-      type: 'institution',
-      title: 'New institution registered',
-      entity: 'Stanford University',
-      time: '5 minutes ago',
-      status: 'approved',
-    },
-    {
-      id: 2,
-      type: 'security',
-      title: 'Security scan completed',
-      entity: 'System-wide scan',
-      time: '1 hour ago',
-      status: 'success',
-    },
-    {
-      id: 3,
-      type: 'certificate',
-      title: 'Bulk certificate issuance',
-      entity: 'MIT - 500 certificates',
-      time: '2 hours ago',
-      status: 'completed',
-    },
-    {
-      id: 4,
-      type: 'alert',
-      title: 'Unusual activity detected',
-      entity: 'Multiple verification requests',
-      time: '3 hours ago',
-      status: 'investigating',
-    },
-  ]
+      type: 'system',
+      title: 'System initialized',
+      entity: 'EduBlockchain platform ready',
+      time: 'System ready',
+      status: 'active',
+    })
+  }
 
   const systemMetrics = [
     {
