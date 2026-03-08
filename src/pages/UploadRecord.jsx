@@ -500,34 +500,34 @@ export const UploadRecord = () => {
             <Upload className="w-5 h-5" />
             <span>Supporting Documents</span>
           </h2>
-          <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
-            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-400 mb-4">
+          <div className="border-2 border-dashed border-gray-600 rounded-lg p-4 sm:p-6 lg:p-8 text-center">
+            <Upload className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+            <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
               Upload supporting documents (transcripts, ID proof, etc.)
             </p>
             <button
               type="button"
               onClick={openSystemFileDialog}
-              className="cyber-button inline-flex items-center space-x-2"
+              className="cyber-button inline-flex items-center space-x-2 text-sm sm:text-base"
             >
-              <Upload className="w-4 h-4" />
+              <Upload className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>Choose Files</span>
             </button>
           </div>
           {uploadedFiles.length > 0 && (
-            <div className="mt-4 space-y-2">
+            <div className="mt-3 sm:mt-4 space-y-2">
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <FileText className="w-4 h-4 text-cyber-blue" />
-                    <span className="text-sm text-gray-300">{file.name}</span>
+                <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-black/30 rounded-lg">
+                  <div className="flex items-center space-x-2 min-w-0 flex-1">
+                    <FileText className="w-3 h-3 sm:w-4 sm:h-4 text-cyber-blue flex-shrink-0" />
+                    <span className="text-xs sm:text-sm text-gray-300 truncate">{file.name}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => removeFile(file)}
-                    className="text-red-400 hover:text-red-300"
+                    className="text-red-400 hover:text-red-300 p-1"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-3 h-3 sm:w-4 sm:h-4" />
                   </button>
                 </div>
               ))}
@@ -537,40 +537,40 @@ export const UploadRecord = () => {
 
         {/* Additional Information */}
         <div className="cyber-card">
-          <h2 className="text-xl font-semibold text-white mb-4">Additional Information</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Additional Information</h2>
           <textarea
             name="additionalInfo"
             value={formData.additionalInfo}
             onChange={handleInputChange}
             rows={3}
-            className="cyber-input w-full"
+            className="cyber-input w-full text-sm sm:text-base"
             placeholder="Any additional notes or special recognitions..."
           />
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <button
             type="button"
             onClick={previewCertificate}
-            className="glass flex items-center justify-center space-x-2 px-6 py-3 hover:bg-white/20 transition-all duration-300"
+            className="glass flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 hover:bg-white/20 transition-all duration-300 text-sm sm:text-base"
           >
-            <Eye className="w-5 h-5" />
+            <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Preview Certificate</span>
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="cyber-button flex items-center justify-center space-x-2 px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cyber-button flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
             {isSubmitting ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>Issuing Certificate...</span>
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Issue Certificate</span>
               </>
             )}
@@ -581,22 +581,22 @@ export const UploadRecord = () => {
       {/* Preview Modal */}
       {showPreview && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 border border-cyber-blue/30 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-white">Certificate Preview</h3>
+          <div className="bg-gray-900 border border-cyber-blue/30 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-white">Certificate Preview</h3>
                 <button
                   onClick={closePreview}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white p-1"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-4 h-4 sm:w-6 sm:h-6" />
                 </button>
               </div>
               
-              <div className="cyber-card p-8">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-r from-cyber-blue to-cyber-purple rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-white">TC</span>
+              <div className="cyber-card p-4 sm:p-6 lg:p-8">
+                <div className="text-center mb-4 sm:mb-6">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-cyber-blue to-cyber-purple rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <span className="text-lg sm:text-2xl font-bold text-white">TC</span>
                   </div>
                   <h4 className="text-2xl font-bold text-white mb-2">{formData.issuer || 'Tech University'}</h4>
                   <p className="text-cyber-blue">Verified Institution</p>

@@ -154,25 +154,58 @@ export const Navbar = ({ user, setUser, setUserRole, userRole }) => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X /> : <Menu />}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 text-gray-300 hover:text-white transition-colors"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-black/90 backdrop-blur-md">
-            {getNavItems().map(item => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-4 py-2 text-gray-300 hover:text-cyber-blue"
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="md:hidden bg-black/90 backdrop-blur-md absolute top-full left-0 right-0">
+            <div className="px-4 py-2">
+              {getNavItems().map(item => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block py-3 text-gray-300 hover:text-cyber-blue transition-colors border-b border-gray-800 last:border-0"
+                >
+                  {item.name}
+                </Link>
+              ))}
+              
+              {/* Mobile User Menu */}
+              {user && (
+                <div className="pt-4 mt-4 border-t border-gray-700">
+                  <div className="flex items-center space-x-2 px-2 py-3 rounded-lg border border-cyber-blue/30 mb-3">
+                    {getRoleIcon()}
+                    <span className="text-sm text-white truncate">{user.name || user.email}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-2 py-3 text-sm text-red-400 hover:text-red-300 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+              
+              {!user && (
+                <div className="pt-4 mt-4 border-t border-gray-700">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block cyber-button text-center"
+                  >
+                    Login
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
