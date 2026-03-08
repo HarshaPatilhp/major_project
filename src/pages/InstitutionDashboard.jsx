@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { 
   Users, 
@@ -16,12 +16,20 @@ import {
   Award,
   Building,
   BarChart3,
-  Activity
+  Activity,
+  Upload,
+  X
 } from 'lucide-react'
 
 export const InstitutionDashboard = () => {
   // Calculate live statistics from stored certificates
   const uploadedCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+  
+  // File upload state
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadStatus, setUploadStatus] = useState('')
+  const [showUploadModal, setShowUploadModal] = useState(false)
   
   const stats = [
     {
@@ -58,21 +66,109 @@ export const InstitutionDashboard = () => {
     },
   ]
 
+  // File upload handlers
+  const openSystemFileDialog = () => {
+    const fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.accept = '.pdf,.jpg,.jpeg,.png'
+    fileInput.multiple = false
+    fileInput.style.display = 'none'
+    
+    fileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files)
+      if (files.length > 0) {
+        const file = files[0]
+        const isValidType = file.type === 'application/pdf' || 
+                            file.type === 'image/jpeg' || 
+                            file.type === 'image/png'
+        const isValidSize = file.size <= 5 * 1024 * 1024 // 5MB
+        
+        if (isValidType && isValidSize) {
+          setSelectedFile(file)
+          setShowUploadModal(true)
+        } else {
+          alert('Please select a valid file (PDF, JPG, or PNG) under 5MB.')
+        }
+      }
+    })
+    
+    document.body.appendChild(fileInput)
+    fileInput.click()
+    
+    setTimeout(() => {
+      document.body.removeChild(fileInput)
+    }, 100)
+  }
+
+  const handleFileUpload = async () => {
+    if (!selectedFile) return
+
+    setIsUploading(true)
+    setUploadStatus('')
+
+    // Simulate blockchain upload process
+    setTimeout(() => {
+      // Create certificate object
+      const newCertificate = {
+        id: Date.now(),
+        title: `Certificate ${uploadedCertificates.length + 1}`,
+        issuer: 'Institution', // You might want to get this from user context
+        date: new Date().toISOString().split('T')[0],
+        status: 'verified',
+        type: 'certificate',
+        hash: '0x' + Math.random().toString(16).substring(2, 66),
+        transactionId: 'tx_' + Math.random().toString(36).substring(2, 15),
+        studentName: 'Student Name', // You might want to add a form for this
+        studentEmail: 'student@example.com',
+        studentId: 'STU001',
+        grade: 'A',
+        credits: '3',
+        duration: '6 months',
+        description: 'Certificate uploaded via dashboard',
+        skills: ['Certificate Upload'],
+        fileName: selectedFile.name,
+        fileSize: selectedFile.size,
+        uploadDate: new Date().toISOString().split('T')[0]
+      }
+
+      // Save to localStorage
+      const existingCertificates = JSON.parse(localStorage.getItem('uploadedCertificates') || '[]')
+      const updatedCertificates = [...existingCertificates, newCertificate]
+      localStorage.setItem('uploadedCertificates', JSON.stringify(updatedCertificates))
+
+      setIsUploading(false)
+      setUploadStatus('success')
+      setSelectedFile(null)
+      setShowUploadModal(false)
+
+      // Reset status after 3 seconds
+      setTimeout(() => {
+        setUploadStatus('')
+      }, 3000)
+    }, 2000)
+  }
+
+  const closeUploadModal = () => {
+    setShowUploadModal(false)
+    setSelectedFile(null)
+    setUploadStatus('')
+  }
+
   const recentCertificates = uploadedCertificates.slice(0, 4)
 
   const quickActions = [
     {
       title: 'Issue Certificate',
-      description: 'Create and issue new certificates',
+      description: 'Upload and issue new certificates',
       icon: Plus,
-      link: '/upload-record',
+      action: openSystemFileDialog, // Changed from link to action
       color: 'from-cyber-blue to-cyber-purple',
     },
     {
       title: 'View All Records',
       description: 'Browse all issued certificates',
       icon: FileText,
-      link: '/upload-record',
+      link: '/upload-record', // Keep this as link for navigation
       color: 'from-cyber-purple to-cyber-pink',
     },
     {
@@ -166,19 +262,35 @@ export const InstitutionDashboard = () => {
         <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {quickActions.map((action, index) => (
-            <Link
-              key={index}
-              to={action.link}
-              className="cyber-card hover:scale-105 transition-transform duration-300 group"
-            >
-              <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} w-fit mb-4`}>
-                <action.icon className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyber-blue transition-colors">
-                {action.title}
-              </h3>
-              <p className="text-gray-400 text-sm">{action.description}</p>
-            </Link>
+            action.link ? (
+              <Link
+                key={index}
+                to={action.link}
+                className="cyber-card hover:scale-105 transition-transform duration-300 group"
+              >
+                <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} w-fit mb-4`}>
+                  <action.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyber-blue transition-colors">
+                  {action.title}
+                </h3>
+                <p className="text-gray-400 text-sm">{action.description}</p>
+              </Link>
+            ) : (
+              <button
+                key={index}
+                onClick={action.action}
+                className="cyber-card hover:scale-105 transition-transform duration-300 group text-left"
+              >
+                <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} w-fit mb-4`}>
+                  <action.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyber-blue transition-colors">
+                  {action.title}
+                </h3>
+                <p className="text-gray-400 text-sm">{action.description}</p>
+              </button>
+            )
           ))}
         </div>
       </div>
@@ -317,7 +429,66 @@ export const InstitutionDashboard = () => {
           </div>
         </div>
       </div>
-      </div>
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="cyber-card max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-white flex items-center space-x-2">
+                <Upload className="w-5 h-5" />
+                <span>Upload Certificate</span>
+              </h3>
+              <button
+                onClick={closeUploadModal}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {selectedFile && (
+              <div className="mb-6">
+                <div className="flex items-center space-x-3 p-3 bg-black/30 rounded-lg border border-gray-700">
+                  <FileText className="w-5 h-5 text-cyber-blue" />
+                  <div className="flex-1">
+                    <p className="text-sm text-white font-medium">{selectedFile.name}</p>
+                    <p className="text-xs text-gray-400">
+                      {(selectedFile.size / 1024 / 1024).toFixed(2)} MB • {selectedFile.type}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {uploadStatus === 'success' && (
+              <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                  <span className="text-green-400">Certificate uploaded successfully!</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex space-x-3">
+              <button
+                onClick={closeUploadModal}
+                className="flex-1 glass px-4 py-2 hover:bg-white/20 transition-all duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleFileUpload}
+                disabled={isUploading || !selectedFile}
+                className="flex-1 cyber-button disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isUploading ? 'Uploading...' : 'Upload Certificate'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
